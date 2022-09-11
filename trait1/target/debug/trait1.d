@@ -1,0 +1,1 @@
+/Users/eduardofv/local/eduardofv/learn-rust/varios/trait1/target/debug/trait1: /Users/eduardofv/local/eduardofv/learn-rust/varios/trait1/src/lib.rs /Users/eduardofv/local/eduardofv/learn-rust/varios/trait1/src/main.rs
