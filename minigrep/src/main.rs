@@ -7,7 +7,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Error parsing arguments: {err}");
+        eprintln!("Error parsing arguments: {err}");
         process::exit(1);
     });
 
@@ -16,7 +16,7 @@ fn main() {
     println!("path: {}", config.path);
 
     if let Err(e) = minigrep::run(config) {
-        println!("Application Error: {e}");
+        eprintln!("Application Error: {e}");
         process::exit(1);
     }
 }
