@@ -49,6 +49,7 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
     results
 }
 
+
 pub struct Config {
     pub query: String,
     pub path: String,
