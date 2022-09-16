@@ -12,8 +12,8 @@ fn main() {
     });
 
     //dbg!(args);
-    println!("q: {}", config.query);
-    println!("path: {}", config.path);
+    eprintln!("q: {}", config.query);
+    eprintln!("path: {}", config.path);
 
     if let Err(e) = minigrep::run(config) {
         eprintln!("Application Error: {e}");

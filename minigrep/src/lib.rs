@@ -6,9 +6,9 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.path)?;
 
-    println!("Text:\n{contents}");
+    eprintln!("Text:\n{contents}");
 
-    println!("Results:");
+    //println!("Results:");
 
     let results = if config.ignore_case {
         search_case_insensitive(&config.query, &contents)
