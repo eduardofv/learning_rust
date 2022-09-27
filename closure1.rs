@@ -35,9 +35,12 @@ impl Inventory {
 }
 
 fn main() {
+    /*
     let store = Inventory { 
         items: vec![ShirtColor::Red, ShirtColor::Blue, ShirtColor::Blue], 
     };
+    */
+    let store = Inventory {items: vec![]};
 
     let user_pref_1 = Some(ShirtColor::Red);
     let user_gets_1 = store.giveaway(user_pref_1);
@@ -48,4 +51,3 @@ fn main() {
     let user_gets_2 = store.giveaway(user_pref_2);
     println!("User 2 wanted {:?} and got {:?}", user_pref_2, user_gets_2);
 }
-
