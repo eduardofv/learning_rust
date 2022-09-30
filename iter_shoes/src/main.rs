@@ -8,9 +8,11 @@ fn shoes_in_size(shoes: Vec<Shoe>, show_size: u32) -> Vec<Shoe> {
     shoes.into_iter().filter(|s| s.size == show_size).collect()
 }
 
+/*
 fn shoes_in_size_2(shoes: &Vec<Shoe>, show_size: u32) -> Vec<Shoe> {
     (&shoes).into_iter().filter(|s| s.size == show_size).collect()
 }
+*/
 
 #[cfg(test)]
 mod tests {
@@ -35,8 +37,8 @@ mod tests {
         ];
 
         println!("{:?}", shoes);
-        //let in_my_size = shoes_in_size(shoes, 10);
-        let in_my_size = shoes_in_size_2(&shoes, 10);
+        let in_my_size = shoes_in_size(shoes, 10);
+        //let in_my_size = shoes_in_size_2(&shoes, 10);
 
         //println!("{:?}", shoes);
         println!("{:?}", in_my_size);
