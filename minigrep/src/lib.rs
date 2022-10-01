@@ -11,8 +11,10 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     //println!("Results:");
 
     let results = if config.ignore_case {
+        eprintln!("Searching case insensitive");
         search_case_insensitive(&config.query, &contents)
     } else {
+        eprintln!("Searching case sensitive");
         search(&config.query, &contents)
     };
 
@@ -20,10 +22,14 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         println!("{}", result);
     }
 
+    eprintln!("{:?}", contents);
+
     Ok(())
 }
 
 
+//Chap12
+/*
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
@@ -34,6 +40,15 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     }
 
     results
+}
+*/
+
+//Chap13
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
