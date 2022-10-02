@@ -3,6 +3,13 @@ use std::process;
 
 use minigrep::Config;
 
+/// # Documentation for *main*
+/// this
+/// is 
+/// code:
+/// ```
+/// a + b = 1
+/// ```
 fn main() {
     //Chapter 12
     /*

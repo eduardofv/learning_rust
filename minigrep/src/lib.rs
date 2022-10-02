@@ -1,8 +1,18 @@
+//! # Minigrep
+//! 
+//! This is from several examples of `the book`
+//!
+
 use std::env;
 use std::error::Error;
 use std::fs;
 
 
+/// Runs the program logic
+///   *mock documentation*
+/// ```
+/// // a = b +1
+/// ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.path)?;
 
@@ -26,6 +36,37 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     eprintln!("{:?}", contents);
 
     Ok(())
+}
+
+/// Add one to a number
+///
+/// # Examples
+///
+/// ```
+/// let arg = -1;
+/// let answer = minigrep::add_one(arg);
+///
+/// assert_eq!(0, answer);
+/// ```
+pub fn add_one(number: i32) -> i32 {
+    number + 1
+}
+
+/// This is an example to reexport (pub use)
+
+pub use self::inner_ops::minus_one;
+
+pub mod inner_ops {
+    /// Extracts one from a number
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// assert_eq!(-1, minigrep::inner_ops::minus_one(0));
+    /// ```
+    pub fn minus_one(number: i32) -> i32 {
+        number - 1
+    }
 }
 
 
@@ -155,6 +196,11 @@ Duct tape";
         assert_eq!(
             vec!["safe, fast, productive.", "Duct tape"], 
             search_case_insensitive(query, contents));
+    }
+
+    #[test]
+    fn test_add_one() {
+        assert_eq!(2, add_one(1));
     }
 
 }
