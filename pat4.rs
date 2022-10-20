@@ -9,6 +9,6 @@ fn main() {
     println!("{x} {y}");
     foo(x, y);
     //println!("{x}"); x was moved into fn
-    //println!("{y}"); y was also moved despite not used
+    println!("{y}"); //y was also moved despite not used
 }
 
