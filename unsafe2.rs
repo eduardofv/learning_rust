@@ -1,9 +1,9 @@
 fn main() {
 
-    let mut x: i32 = 5;
-    let r_unm = &x as *const i32;
-    let r_mut = &mut x as *mut i32;
-    let r_mut2 = &mut x as *mut i32;
+    let mut x = String::from("1223");
+    let r_unm = &x as *const String;
+    let r_mut = &mut x as *mut String;
+    let r_mut2 = &mut x as *mut String;
 
     //no permitido, una ref mutable y una inmutable
     //println!("{}", *r_unm);
@@ -22,5 +22,6 @@ fn main() {
         println!("{}", *r_mut2);
     }
 
-    println!("{x}");
+    //already dropped, can't be used
+    //println!("{x}");
 }
