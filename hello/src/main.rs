@@ -26,12 +26,17 @@ fn handle_connection(mut stream: TcpStream){
 
     eprintln!("Request: {:#?}", http_request);
 
-    let status_line = "HTTP/1.1 200 OK";
-    let contents = fs::read_to_string("hello.html").unwrap();
+    let (status_line, filename) = if http_request[0] == "GET / HTTP/1.1" {
+        eprintln!("Response 200");
+        ("HTTP/1.1 200 OK", "hello.html")
+    } else {
+        eprintln!("Response 404");
+        ("HTTP/1.1 404 NOT FOUND", "404.html")
+    }
+    let contents = fs::read_to_string(filename).unwrap();
     let length = contents.len();
 
     let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
 
     stream.write_all(response.as_bytes()).unwrap();
 }
-
