@@ -5,7 +5,7 @@ use std::{
 
 pub struct Worker {
     id: u32,
-    handle: thread::JoinHandle<()>,
+    thread: thread::JoinHandle<()>,
 }
 
 impl Worker {
@@ -13,10 +13,13 @@ impl Worker {
             id: u32, 
             receiver: Arc<Mutex<mpsc::Receiver<Job>>>
         ) -> Worker {
-        Worker {
-            id: id,
-            handle: thread::spawn(|| { receiver; }),
-        }
+            let thread = thread::spawn(move || loop {
+                let job = receiver.lock().unwrap().recv().unwrap();
+                eprintln!("Worker {id} got a job, executing");
+                job();
+            });
+
+            Worker { id, thread }
     }
 }
 
@@ -48,9 +51,9 @@ impl ThreadPool {
     where
         F: FnOnce() -> () + Send + 'static,
     {
-        let job = Box::new(f);
+        let job = Box::new(handler);
 
-        self.sender.send(job).unwrap;
+        self.sender.send(job).unwrap();
     }
 }
 
