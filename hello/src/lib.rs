@@ -5,7 +5,7 @@ use std::{
 
 pub struct Worker {
     id: u32,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl Worker {
@@ -14,18 +14,25 @@ impl Worker {
             receiver: Arc<Mutex<mpsc::Receiver<Job>>>
         ) -> Worker {
             let thread = thread::spawn(move || loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
-                eprintln!("Worker {id} got a job, executing");
-                job();
+                match receiver.lock().unwrap().recv() {
+                    Ok(job) => {
+                        println!("Worker {id} got a job, executing");
+                        job();
+                    }
+                    Err(_) => {
+                        println!("Worker {id} disconnected, shutting down");
+                        break;
+                    }
+                }
             });
 
-            Worker { id, thread }
+            Worker { id, thread: Some(thread) }
     }
 }
 
 pub struct ThreadPool {
     threads: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: Option<mpsc::Sender<Job>>,
 }
 
 type Job = Box<dyn FnOnce() + Send + 'static>;
@@ -44,7 +51,7 @@ impl ThreadPool {
             threads.push(Worker::new(id as u32, Arc::clone(&receiver)));
         }
 
-        ThreadPool { threads, sender }
+        ThreadPool { threads, sender: Some(sender), }
     }
 
     pub fn execute<F>(&self, handler: F) 
@@ -53,7 +60,21 @@ impl ThreadPool {
     {
         let job = Box::new(handler);
 
-        self.sender.send(job).unwrap();
+        self.sender.as_ref().unwrap().send(job).unwrap();
+    }
+}
+
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        drop(self.sender.take());
+
+        for worker in &mut self.threads {
+            println!("Shutting down worker {}", worker.id);
+
+            if let Some(t) = worker.thread.take() {
+                t.join().unwrap();
+            }
+        }
     }
 }
 

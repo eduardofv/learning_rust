@@ -13,7 +13,7 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
 
         eprintln!("Connection established {:?}", stream.peer_addr());
@@ -22,6 +22,8 @@ fn main() {
             handle_connection(stream);
         });
     }
+
+    println!("Shutting down");
 }
 
 fn handle_connection(mut stream: TcpStream){
@@ -36,16 +38,16 @@ fn handle_connection(mut stream: TcpStream){
 
     let (status_line, filename) = match &http_request[0][..] {
         "GET / HTTP/1.1" => { 
-            eprintln!("Response 200");
+            println!("Response 200");
             ("HTTP/1.1 200 OK", "hello.html")
         },
         "GET /slow HTTP/1.1" => { 
-            eprintln!("Response 200 slow");
+            println!("Response 200 slow");
             thread::sleep(Duration::from_secs(5));
             ("HTTP/1.1 200 OK", "hello.html")
         },
         _ => {
-            eprintln!("Response 404");
+            println!("Response 404");
             ("HTTP/1.1 404 NOT FOUND", "404.html")
         },
     };
